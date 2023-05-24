@@ -36,7 +36,7 @@ se detuvo, el mismo no volvera a moverse a no ser que el boton subir o bajar se 
 
 - pausar_montacarga() --> Esta funcion pausa el montacargas, detiene el funcionamiento hasta que se presione subir o bajar. Nos retornara 1 o 0 que nos indicara si el sistema esta pausado o no. 
 
-- control_montacarga(int contador) --> Esta funcion controla al montacargas, leyendo los estados de los botones que se presionan y actuando en consecuencia. ESta funcion recibira un contador y nos retornara ese mismo contador modificado.
+- control_montacarga(int contador) --> Esta funcion controla al montacargas, leyendo los estados de los botones que se presionan y actuando en consecuencia. Esta funcion recibira un contador y nos retornara ese mismo contador modificado.
 
 - numeros(int contador) --> Esta funcion nos permite mostrar en el display de 7 segmentos el numero que se pase en el parametro contador. 
 
