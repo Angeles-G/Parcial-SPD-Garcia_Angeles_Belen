@@ -17,6 +17,7 @@ Se desarrollo un sistema a travez del cual podemos subir, bajar o pausar el mont
 - Tres botones
 
 # Funcinamiento general:
+
 Mediante la utilizacion de un arduino Uno, se programo un display de 7 segmentos el cual nos indica el piso 
 en el que se encuentra nuestro montacargas. Para poder subir, bajar o pausar nuestro montacargas utilizaremos los botones.
 - En caso de seleccionar subir o bajar nuestro montacragas realizara dicha accion y en conjunto encendera un led verde que 

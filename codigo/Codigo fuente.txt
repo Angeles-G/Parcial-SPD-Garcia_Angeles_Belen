@@ -1,0 +1,333 @@
+//Angeles Belen Garcia 1B 
+// pines de leds
+#define led_rojo 5
+#define led_verde 6
+// pines botones
+#define subir 4
+#define pausa 3
+#define bajar 2
+// pines 7 segmentos
+#define A 11
+#define B 10
+#define C 7
+#define D 8
+#define E 9
+#define F 12
+#define G 13
+
+//variables
+int tiempo_trayecto = 3000; 
+int estado;
+int flag=1; 
+int contador=0; 
+int tiempo; 
+int baje = 0;
+int stop = 0;
+int subi = 0;
+
+void setup()
+{
+ 	pinMode(led_rojo, OUTPUT);
+  	pinMode(led_verde, OUTPUT);
+  	pinMode(subir, INPUT_PULLUP); 
+  	pinMode(pausa, INPUT_PULLUP); 
+  	pinMode(bajar, INPUT_PULLUP); 
+  
+    pinMode(A, OUTPUT);
+    pinMode(B, OUTPUT);
+    pinMode(C, OUTPUT);
+    pinMode(D, OUTPUT);
+    pinMode(E, OUTPUT);
+    pinMode(F, OUTPUT);
+    pinMode(G, OUTPUT);
+  
+  	Serial.begin(9600);
+}
+
+void loop()
+{
+  contador = control_montacarga(contador);
+}
+
+void encender_led(int led)
+{
+  digitalWrite(led, HIGH); 
+}
+void apagar_led(int led)
+{
+  digitalWrite(led, LOW); 
+}
+
+void leer_estado_boton(int boton)
+{
+  estado = digitalRead(boton);
+  return; 
+}
+
+int subir_montacarga(int contador)
+{
+  leer_estado_boton(subir);
+  if (estado == 0)
+  {
+    Serial.println("SUBIR");
+ 	while (contador < 9 && stop != 1)
+    {
+      if (baje == 1 )
+      {
+        contador = 0;
+        baje  = 0;
+        break; 
+      }
+      contador++;
+      Serial.print("Subiendo al piso: ");
+      Serial.println(contador);
+      numeros(contador);
+      tiempo = millis();
+        while (millis() < tiempo + tiempo_trayecto)
+        {
+          encender_led(led_verde);
+          apagar_led(led_rojo);
+          contador = bajar_montacarga(contador);
+          stop = pausar_montacarga();
+        }
+     }
+    subi = 1;
+    encender_led(led_rojo);
+    apagar_led(led_verde);
+   }
+  return contador;
+}
+
+int bajar_montacarga(int contador)
+{
+  leer_estado_boton(bajar);
+  if (estado == 0)
+  {
+    Serial.println("BAJAR");
+    //Serial.println(contador);
+    while (contador > 0 && stop != 1)
+    {
+      if (subi == 1 )
+      {
+        contador = 9;
+        subi  = 0;
+        break;
+      }
+      contador--;
+      Serial.print("Bajando al piso: ");
+      Serial.println(contador);
+      numeros(contador);
+      tiempo = millis();
+      while (millis() < tiempo + tiempo_trayecto)
+      {	
+        encender_led(led_verde);
+        apagar_led(led_rojo);
+        contador = subir_montacarga(contador); 
+        stop = pausar_montacarga();
+      } 
+     }
+   baje = 1;
+   encender_led(led_rojo);
+   apagar_led(led_verde);
+  }
+  return contador;
+}
+
+int pausar_montacarga()
+{
+   leer_estado_boton(pausa);
+   if (estado == 0)
+   {
+     Serial.println("PAUSA");
+     encender_led(led_rojo);
+     apagar_led(led_verde); 
+     stop = 1;
+    }
+  return stop;
+}
+
+int control_montacarga(int contador)
+{
+   subi = 0;
+   baje = 0;
+   stop = 0;
+  leer_estado_boton(subir);
+  if (estado == 0)
+  {
+    contador = subir_montacarga(contador); 
+   }
+   else
+   {
+     leer_estado_boton(bajar);
+     if (estado == 0)
+     {
+       contador = bajar_montacarga(contador);
+      }
+    }
+  return contador;
+}
+
+
+//numero en display de 7 segmentos
+void numeros(int contador)
+{
+  switch(contador)
+  {
+    case 1:
+    	hacer_uno();
+    	break;
+    case 2:
+    	hacer_dos();
+    	break;
+    case 3:
+    	hacer_tres();
+    	break;
+    case 4:
+    	hacer_cuatro();
+    	break;
+    case 5:
+    	hacer_cinco();
+    	break;
+    case 6: 
+    	hacer_seis();
+    	break;
+    case 7:
+    	hacer_siete();
+    	break;
+    case 8:
+    	hacer_ocho();
+    	break;
+    case 9:
+    	hacer_nueve(); 
+    	break; 
+    default:
+        hacer_cero();
+    	break;
+  }
+}
+
+void hacer_cero()
+{
+  digitalWrite(A, HIGH);
+  digitalWrite(B, HIGH);
+  digitalWrite(C, HIGH);
+  digitalWrite(D, HIGH);
+  digitalWrite(E, HIGH);
+  digitalWrite(F, HIGH);
+  
+  digitalWrite(G, LOW);  
+}
+
+void hacer_uno()
+{
+  digitalWrite(A, LOW);
+  
+  digitalWrite(B, HIGH);
+  digitalWrite(C, HIGH);
+  
+  digitalWrite(D, LOW);
+  digitalWrite(E, LOW);
+  digitalWrite(F, LOW);
+  digitalWrite(G, LOW); 
+}
+void hacer_dos()
+{
+  digitalWrite(A, HIGH);
+  digitalWrite(B, HIGH);
+  
+  digitalWrite(C, LOW);
+  
+  digitalWrite(D, HIGH);
+  digitalWrite(E, HIGH);
+  
+  digitalWrite(F, LOW);
+  
+  digitalWrite(G, HIGH); 
+}
+void hacer_tres()
+{
+  digitalWrite(A, HIGH);
+  
+  digitalWrite(B, HIGH);
+  digitalWrite(C, HIGH);
+  digitalWrite(D, HIGH);
+  
+  digitalWrite(E, LOW);
+  digitalWrite(F, LOW);
+  
+  digitalWrite(G, HIGH); 
+}
+void hacer_cuatro()
+{
+  digitalWrite(A, LOW);
+  
+  digitalWrite(B, HIGH);
+  digitalWrite(C, HIGH);
+  
+  digitalWrite(D, LOW);
+  digitalWrite(E, LOW);
+  
+  digitalWrite(F, HIGH);
+  digitalWrite(G, HIGH);  
+}
+void hacer_cinco()
+{
+  digitalWrite(A, HIGH);
+  
+  digitalWrite(B, LOW);
+  
+  digitalWrite(C, HIGH);
+  digitalWrite(D, HIGH);
+  
+  digitalWrite(E, LOW);
+  
+  digitalWrite(F, HIGH);
+  digitalWrite(G, HIGH); 
+}
+void hacer_seis()
+{
+  digitalWrite(A, HIGH);
+  
+  digitalWrite(B, LOW);
+  
+  digitalWrite(C, HIGH);
+  digitalWrite(D, HIGH);
+  digitalWrite(E, HIGH);
+  digitalWrite(F, HIGH);
+  digitalWrite(G, HIGH); 
+}
+void hacer_siete()
+{
+  digitalWrite(A, HIGH);
+  
+  digitalWrite(B, HIGH);
+  digitalWrite(C, HIGH);
+  
+  digitalWrite(D, LOW);
+  digitalWrite(E, LOW);
+  digitalWrite(F, LOW);
+  digitalWrite(G, LOW); 
+}
+void hacer_ocho()
+{
+  digitalWrite(A, HIGH);
+  digitalWrite(B, HIGH);
+  digitalWrite(C, HIGH);
+  digitalWrite(D, HIGH);
+  digitalWrite(E, HIGH);
+  digitalWrite(F, HIGH);
+  digitalWrite(G, HIGH); 
+}
+void hacer_nueve()
+{
+  digitalWrite(A, HIGH);
+  digitalWrite(B, HIGH);
+  digitalWrite(C, HIGH);
+  digitalWrite(D, HIGH);
+  
+  digitalWrite(E, LOW);
+  
+  digitalWrite(F, HIGH);
+  digitalWrite(G, HIGH); 
+}
+
