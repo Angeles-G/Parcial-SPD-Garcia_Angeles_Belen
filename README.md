@@ -24,5 +24,8 @@ segmentos.
 - Si por otra parte, seleccionamos pausa el montacarga se detendra y se encendera un led rojo que indicara que el montacarga
 se detuvo, el mismo no volvera a moverse a no ser que el boton subir o bajar se presione. 
 
-# Función principal
+
+# Link al proyecto:
+- https://www.tinkercad.com/things/hnSr59MyaD9-parcial-spd-garcia-angeles-belen-1b/editel?sharecode=VRNFzka11C9dcUpGZAGHC3VY3ogpH4FpOKJKRxT265M
+
 
